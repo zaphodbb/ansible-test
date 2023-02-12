@@ -1,0 +1,39 @@
+---
+- name: Display Exec Env details
+  hosts: localhost
+  gather_facts: no
+  become: no
+
+  tasks:
+  - name: get RPM packages
+    command: rpm -qa
+    register: rpms
+    ignore_errors: true
+
+  - name: Get pip packages
+    command: python3 -m pip list
+    register: pips
+    ignore_errors: true
+
+  - name: Get python version
+    command: python3 --version
+    register: pyver
+    ignore_errors: true
+
+  - name: Get installed Galaxy collections
+    command: ansible-galaxy collection list
+    register: galaxy
+    ignore_errors: true
+
+  - name: Compile variables into a larger dict
+    set_fact:
+      ansible_data:
+        Python Interpreter: "{{ ansible_python_interpreter }}"
+        Python Version: "{{ pyver.stdout_lines }}"
+        RPMs: "{{ rpms.stdout_lines }}"
+        PIP Packages: "{{ pips.stdout }}"
+        Galaxy Collections: "{{ galaxy.stdout_lines }}"
+
+  - name: Display result
+    debug:
+      var: ansible_data
