@@ -29,9 +29,9 @@
     set_fact:
       ansible_data:
         Python Interpreter: "{{ ansible_python_interpreter }}"
-        Python Version: "{{ pyver.stdout_lines }}"
+        Python Version: "{{ pyver.stdout }}"
         RPMs: "{{ rpms.stdout_lines }}"
-        PIP Packages: "{{ pips.stdout }}"
+        PIP Packages: "{{ pips.stdout_lines }}"
         Galaxy Collections: "{{ galaxy.stdout_lines }}"
 
   - name: Display result
